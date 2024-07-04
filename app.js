@@ -35,8 +35,15 @@ app.get('/api', (req, res) => {
 });
 
 app.post('/api/posts', verifyToken, (req, res) => {
-    res.json({
-        message: 'Post created...'
+    req.verify(req.token, 'secretkey', (err, authData) => {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            res.json({
+                message: 'Post created...',
+                authData: authData
+            });
+        }
     });
 });
 
